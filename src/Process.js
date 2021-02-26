@@ -8,27 +8,27 @@ const BOSS_STRINGS = {
 }
 
 function searchMapBuffer(buffer, query, startingFrom = 0) {
-    const offset = buffer.indexOf(query, startingFrom) + query.length;
-    console.log(buffer.length);
+    var offset = buffer.indexOf(query, startingFrom);
     if (offset == -1) return {offset: -1};
+    offset += query.length;
     return {
         x: buffer.readFloatLE(offset),
         y: buffer.readFloatLE(offset + 8),
-        offset: offset + 1
+        offset: offset
     }
 }
 
 function getIndexes(buffer, query) {
     var coords = [];
     var coordObject = {x: 0, y: 0, offset: 0};
-    while ((coordObject = searchMapBuffer(buffer, query, coordObject.offset)).offset != -1) {
-        coords.push({x: coordObject.x, y: coordObject.y});
+    while (coordObject.offset != -1) {
+        coordObject = searchMapBuffer(buffer, query, coordObject.offset);
+        coords.push({x: Math.round(coordObject.x), y: Math.round(coordObject.y)});
     }
     return coords;
 }
 
 export function findLocations(buffer, targets) {
-    console.log(buffer.length);
     var ret = {};
     targets.map(target => {
         ret[target] = getIndexes(buffer, BOSS_STRINGS[target]);

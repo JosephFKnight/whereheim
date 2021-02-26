@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Map from '../src/Map';
+import Map, { COLORS } from '../src/Map';
 
 
 export default function UploadForm() {
@@ -21,9 +21,9 @@ export default function UploadForm() {
         const reader = new FileReader();
         reader.onload = (e) => {
             setBuffer(Buffer.from(reader.result));
+            setSubmitted(true);
         }
         reader.readAsArrayBuffer(file);
-        setSubmitted(true);
     };
     const handleCheck = (cb) => (event) => cb(event.currentTarget.checked)
     const getTargets = () => {
@@ -37,67 +37,101 @@ export default function UploadForm() {
         return targets;
     }
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                File Upload:
-                <input type="file" ref={fileInput} />
-            </label>
-            <div>
-                Select What to Reveal:
+        <>
+            <div className="info">
+                <p className="row">Welcome to Whereheim! Select your world's db file below to find the merchant and/or the
+                locations of various bosses.</p>
+                <p className="row">This file is located in
+                    <code>C:\Users\%USERNAME%\AppData\LocalLow\IronGate\Valheim\worlds</code>
+                </p>
             </div>
-            <label>
-                Merchant:
-                <input
-                    name="merchant"
-                    type="checkbox"
-                    checked={merchant}
-                    onChange={handleCheck(setMerchant)} />
-            </label>
-            <label>
-                Eikthyr:
-                <input
-                    name="eikthyr"
-                    type="checkbox"
-                    checked={eikthyr}
-                    onChange={handleCheck(setEikthyr)} />
-            </label>
-            <label>
-                Elder:
-                <input
-                    name="elder"
-                    type="checkbox"
-                    checked={elder}
-                    onChange={handleCheck(setElder)} />
-            </label>
-            <label>
-                Bonemass:
-                <input
-                    name="bonemass"
-                    type="checkbox"
-                    checked={bonemass}
-                    onChange={handleCheck(setBonemass)} />
-            </label>
-            <label>
-                Moder:
-                <input
-                    name="moder"
-                    type="checkbox"
-                    checked={moder}
-                    onChange={handleCheck(setModer)} />
-            </label>
-            <label>
-                Yagluth:
-                <input
-                    name="yagluth"
-                    type="checkbox"
-                    checked={yagluth}
-                    onChange={handleCheck(setYagluth)} />
-            </label>
-            <button type="submit" >Upload</button>
-            {submitted &&
-                (<Map targets={getTargets()} buffer={buffer} />)
+            {!submitted &&
+                <div className="row upload mb-3">
+                    <input onChange={handleSubmit} type="file" ref={fileInput} className="form-control" id="fileUpload" />
+                </div>
             }
-        </form>
-
+            {submitted &&
+                <div className="row align-items-center">
+                    <Map targets={getTargets()} buffer={buffer} className="col" />
+                    <div className="col-3 container">
+                        <div className="row">
+                            Select What to Reveal:
+                        </div>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.merchant }}>Merchant:</div>
+                            <input
+                                name="merchant"
+                                type="checkbox"
+                                checked={merchant}
+                                onChange={handleCheck(setMerchant)}
+                                className="col justify-content-left" />
+                        </label>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.eikthyr }}>Eikthyr: </div>
+                            <input
+                                name="eikthyr"
+                                type="checkbox"
+                                checked={eikthyr}
+                                onChange={handleCheck(setEikthyr)}
+                                className="col" />
+                        </label>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.elder }}>Elder:</div>
+                            <input
+                                name="elder"
+                                type="checkbox"
+                                checked={elder}
+                                onChange={handleCheck(setElder)}
+                                className="col" />
+                        </label>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.bonemass }}>Bonemass:</div>
+                            <input
+                                name="bonemass"
+                                type="checkbox"
+                                checked={bonemass}
+                                onChange={handleCheck(setBonemass)}
+                                className="col" />
+                        </label>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.moder }}>Moder: </div>
+                            <input
+                                name="moder"
+                                type="checkbox"
+                                checked={moder}
+                                onChange={handleCheck(setModer)}
+                                className="col" />
+                        </label>
+                        <label className="row">
+                            <div className="col" style={{ color: COLORS.yagluth }}>Yagluth:</div>
+                            <input
+                                name="yagluth"
+                                type="checkbox"
+                                checked={yagluth}
+                                onChange={handleCheck(setYagluth)}
+                                className="col" />
+                        </label>
+                        <br />
+                        <div className="row">
+                            <button className="col btn btn-secondary" onClick={() => setSubmitted(false)}>Submit another map</button>
+                        </div>
+                    </div>
+                    <div>
+                        Notes:
+                        <ul>
+                            <li>Hover over a location to get the coordinates. This can be used in a `goto X Y` console command
+                            to teleport to that location.
+                            </li>
+                            {merchant && (
+                                <li>
+                                    The world gets generated with several merchant locations.
+                                    The first time one of these locations is visited, that becomes the world's
+                                    one and only merchant location.
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                </div>}
+        </>
     );
 }
