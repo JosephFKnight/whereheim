@@ -4,7 +4,6 @@ import {findLocations} from '../src/Process';
 
 export default function Map({buffer, targets}) {
     console.log(typeof(buffer));
-    console.log(typeof(Buffer.from("")))
     const coords = findLocations(buffer, targets);
     return (
         <ul>
