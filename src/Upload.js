@@ -38,16 +38,20 @@ export default function UploadForm() {
     }
     return (
         <>
-            <div className="info">
-                <p className="row">Welcome to Whereheim! Select your world's db file below to find the merchant and/or the
-                locations of various bosses.</p>
-                <p className="row">This file is located in
-                    <code>C:\Users\%USERNAME%\AppData\LocalLow\IronGate\Valheim\worlds</code>
-                </p>
-            </div>
+
             {!submitted &&
-                <div className="row upload mb-3">
-                    <input onChange={handleSubmit} type="file" ref={fileInput} className="form-control" id="fileUpload" />
+                <div>
+                    <div className="info">
+                        <p className="row">
+                            Welcome to Whereheim! Select your world's db file below to find the merchant and/or the
+                            locations of various bosses.</p>
+                        <p className="row">This file is located in
+                    <code>C:\Users\%USERNAME%\AppData\LocalLow\IronGate\Valheim\worlds</code>
+                        </p>
+                    </div>
+                    <div className="row upload mb-3">
+                        <input onChange={handleSubmit} type="file" ref={fileInput} className="form-control" id="fileUpload" />
+                    </div>
                 </div>
             }
             {submitted &&
